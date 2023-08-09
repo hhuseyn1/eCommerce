@@ -1,0 +1,184 @@
+﻿body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+}
+
+.navbar {
+	height: 100vh;
+	width: 250px;
+	background-color: #333;
+	position: fixed;
+	left: 0;
+	top: 0;
+	overflow-x: hidden;
+	padding-top: 20px;
+}
+
+	.navbar a {
+		padding: 20px;
+		text-decoration: none;
+		font-size: 18px;
+		color: white;
+		display: block;
+		transition: 0.3s;
+	}
+
+		.navbar a:hover {
+			background-color: #555;
+		}
+
+h3 {
+	color: white;
+	border: 2px solid lightslategray;
+	padding: 15px;
+	margin-right: 5px;
+}
+
+.content {
+	margin-left: 250px;
+	padding: 20px;
+}
+
+.navbar a i {
+	margin-right: 10px;
+}
+
+
+.create-button {
+	display: inline-block;
+	padding: 10px 20px;
+	color: #333;
+	text-decoration: none;
+	border-radius: 2px;
+	border: 2px solid #333;
+}
+
+	.create-button:hover {
+		color: white;
+		background-color: #333;
+	}
+
+
+.form-container {
+	width: 50%;
+	margin: 0 auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+}
+
+.input-field {
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin-top: 6px;
+	margin-bottom: 16px;
+}
+
+.submit-btn {
+	background-color: #007BFF;
+	color: white;
+	padding: 12px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.cancel-btn {
+	background-color: #DC3545;
+	color: white;
+	padding: 12px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.create {
+	color: #333;
+	text-align: center;
+	border: 0px;
+}
+
+.colored-line {
+	border-top: 2px solid #333;
+	margin-top: 20px;
+}
+
+.button {
+	text-align: right;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+.card {
+	border: none;
+	border-radius: 10px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	transition: all 0.5s ease;
+	margin: 30px 10px;
+	width: 50vh;
+	display: inline-block;
+}
+
+	.card:hover {
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+		transform: translateY(-5px);
+	}
+
+.card-img-top {
+	height: 100px;
+	object-fit: cover;
+}
+
+.card-body {
+	padding: 1rem;
+}
+
+.card-title {
+	font-size: 1.3rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+}
+
+.card-text {
+	font-size: 1rem;
+	margin-bottom: 1rem;
+}
+
+.btn-primary {
+	display: inline-block;
+	background-color: #007bff;
+	color: #fff;
+	padding: 0.75rem 1.5rem;
+	border-radius: 10px;
+	transition: all 0.3s ease;
+	text-decoration: none;
+}
+
+.danger {
+	display: inline-block;
+	background-color: #DC3545;
+	color: #fff;
+	padding: 0.75rem 1.5rem;
+	border-radius: 10px;
+	border: none;
+	transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+	background-color: #0062cc;
+}
+
+.danger:hover {
+	background-color: #c82333;
+	cursor: pointer;
+}

@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Admin Panel</title>
+</head>
+
+<body>
+    <div class="navbar">
+        <h3>Admin Panel</h3>
+        <a href="../Admin/Index"><i class="fas fa-home"></i> Home</a>
+        <a href="../Admin/Products"><i class="fas fa-cart-plus"></i> Products</a>
+        <a href="../Admin/Categories"><i class="fas fa-bars"></i> Categories</a>
+        <a href="../Admin/Tags"><i class="fas fa-tags"></i> Tags</a>
+        <a href="../Admin/About"><i class="fas fa-info-circle"></i> About</a>
+    </div>
+
+    <div class="content">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
