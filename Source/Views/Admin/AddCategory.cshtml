@@ -1,11 +1,12 @@
-﻿@model Category
+﻿@using Source.Models.ViewModels;
+@model AddCategoryViewModel
 
 <h2 class="create">Create Category</h2>
 <div class="form-container">
     <form action="AddCategory" method="post">
         <label for="input-field">Name:</label>
-        <input type="text" id="input-field" class="input-field" name="input-field" placeholder="Enter name here...">
+        <input type="text" id="input-field" class="input-field" name="Name" placeholder="Enter name here...">
         <button type="submit" asp-action="Index" asp-controller="Admin" class="cancel-btn">Cancel</button>
-        <button type="submit" class="submit-btn">Add</button>
+        <button type="submit" asp-action="AddCategory" asp-controller="Admin" class="submit-btn">Add</button>
     </form>
 </div>

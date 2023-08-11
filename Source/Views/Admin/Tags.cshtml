@@ -5,3 +5,17 @@
     <a class="create-button" href="../Admin/AddTag">Create Tag</a>
 </div>
 <div class="colored-line"></div>
+<div class="main">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@item.Name</h5>
+                <p class="card-text">Id: @item.Id</p>
+                <p class="card-text">Created Date: @item.CreatedDate</p>
+                <button asp-action="DeleteTag" asp-controller="Admin" class="danger">Delete</button>
+                <a href="../Admin/EditTag/@item.Name" class="btn-primary">Edit</a>
+            </div>
+        </div>
+    }
+</div>

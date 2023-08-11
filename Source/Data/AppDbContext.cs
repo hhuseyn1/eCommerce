@@ -32,8 +32,12 @@ public class AppDbContext : DbContext
           .HasOne(pt => pt.Product)
           .WithMany(p => p.ProductTags)
           .HasForeignKey(pt => pt.ProductId);
-    }
 
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasColumnType("decimal(18, 2)");
+
+    }
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }

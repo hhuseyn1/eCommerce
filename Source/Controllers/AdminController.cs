@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Source.Data;
 using Source.Models;
 using Source.Models.ViewModels;
@@ -8,10 +9,12 @@ namespace Source.Controllers;
 public class AdminController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AdminController(AppDbContext context)
+    public AdminController(AppDbContext context, IMapper mapper)
     {
-        this._context = context;  
+        this._context = context;
+        this._mapper = mapper;
     }
 
     public IActionResult Index()
@@ -46,6 +49,10 @@ public class AdminController : Controller
     {
         return View(_context.Products.ToList());
     }
+    public IActionResult About()
+    {
+        return View();
+    }
 
     [HttpPost]
     public IActionResult AddProduct(AddProductViewModel addProduct)
@@ -53,41 +60,38 @@ public class AdminController : Controller
         return View();
     }
     [HttpPost]
-    public IActionResult AddTag(AddTagViewModel addTag)
+    public async Task<IActionResult> AddTag(AddTagViewModel addTag)
     {
+
         if (ModelState.IsValid)
         {
-            Tag tag = new Tag()
-            {
-                Id = Guid.NewGuid(),
-                Name = addTag.Name,
-                CreatedDate = DateTime.Now
-            };
+            Tag tag = _mapper.Map<Tag>(addTag);
+            tag.Id = Guid.NewGuid();
+            tag.Name = addTag.Name;
+            tag.CreatedDate = DateTime.Now;
             _context.Tags.Add(tag);
-            _context.SaveChangesAsync();    
+            await _context.SaveChangesAsync();
         }
-            return RedirectToAction("Tags");
+        return RedirectToAction("Tags");
     }
+
+
     [HttpPost]
-    public IActionResult AddCategory(AddCategoryViewModel addCategory)
+    public async Task<IActionResult> AddCategory(AddCategoryViewModel addCategory)
     {
         if (ModelState.IsValid)
         {
-            Category category = new Category()
-            {
-                Id = Guid.NewGuid(),
-                Name = addCategory.Name,
-                CreatedDate = DateTime.Now
-            };
+            Category category = _mapper.Map<Category>(addCategory);
+            category.Id = Guid.NewGuid();
+            category.Name = addCategory.Name;
+            category.CreatedDate = DateTime.Now;
             _context.Categories.Add(category);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
         return RedirectToAction("Categories");
     }
 
-    public IActionResult About()
-    {
-        return View();
-    }
+
+
 
 }
