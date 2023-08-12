@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Source.Data;
 using Source.Models;
@@ -35,6 +36,11 @@ public class AdminController : Controller
     public IActionResult AddCategory()
     {
         return View("AddCategory");
+    }
+
+    public IActionResult EditCategory()
+    {
+        return View("EditCategory");
     }
 
     public IActionResult Tags()
@@ -88,6 +94,92 @@ public class AdminController : Controller
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
         }
+        return RedirectToAction("Categories");
+    }
+
+    [HttpGet]
+    public IActionResult EditProduct(string name)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.Name == name);
+        if (product is not null)
+            return View(product);
+        return RedirectToAction("Products");
+    }
+
+    [HttpPost]
+    public IActionResult EditProduct(AddProductViewModel updatedProduct)
+    {
+        if (ModelState.IsValid)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == updatedProduct.Id);
+            if (product is not null)
+                product.Name = updatedProduct.Name;
+        }
+        return RedirectToAction("Products");
+    }
+
+    [HttpGet]
+    public IActionResult EditCategory(string name)
+    {
+        var category = _context.Categories.FirstOrDefault(p => p.Name == name);
+        if (category is not null)
+            return View(category);
+        return RedirectToAction("Categories");
+    }
+
+    [HttpPost]
+    public IActionResult EditCategory(AddCategoryViewModel updatedCategory)
+    {
+        if (ModelState.IsValid)
+        {
+            var category = _context.Categories.FirstOrDefault(p => p.Id == updatedCategory.Id);
+            if (category is not null)
+                category.Name = updatedCategory.Name;
+        }
+        return RedirectToAction("Categories");
+    }
+
+    [HttpGet]
+    public IActionResult EditTag(string name)
+    {
+        var tag = _context.Tags.FirstOrDefault(p => p.Name == name);
+        if (tag is not null)
+            return View(tag);
+        return RedirectToAction("Tags");
+    }
+
+    [HttpPost]
+    public IActionResult EditTag(AddTagViewModel updatedTag)
+    {
+        if (ModelState.IsValid)
+        {
+            var tag = _context.Tags.FirstOrDefault(p => p.Id == updatedTag.Id);
+            if (tag is not null)
+                tag.Name = updatedTag.Name;
+        }
+        return RedirectToAction("Tags");
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteProduct(Product deleteProduct)
+    {
+
+        return RedirectToAction("Products");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteTag(Tag deleteTag)
+    {
+
+        return RedirectToAction("Tags");
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteCategory(Category deleteCategory)
+    {
+
         return RedirectToAction("Categories");
     }
 

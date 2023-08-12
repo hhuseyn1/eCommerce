@@ -1,21 +1,22 @@
 ﻿@model List<Category>
-
 <div class="header">
     <h1>Categories</h1>
-    <a class="create-button" href="../Admin/AddCategory">Create Category</a>
+    <a class="create-button" asp-action="AddCategory" asp-controller="Admin">Create Category</a>
 </div>
 <div class="colored-line"></div>
 <div class="main">
-    @foreach (var item in Model)
-    {
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">@item.Name</h5>
-                <p class="card-text">Id: @item.Id</p>
-                <p class="card-text">Created Date: @item.CreatedDate</p>
-                <button asp-action="DeleteCategory" asp-controller="Admin" class="danger">Delete</button>
-                <a href="../Admin/EditCategory/@item.Name" class="btn-primary">Edit</a>
+    <form asp-action="DeleteCategory" asp-controller="Admin" method="post">
+        @foreach (var item in Model)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">Id: @item.Id</p>
+                    <p class="card-text">Created Date: @item.CreatedDate</p>
+                    <button type="submit" asp-action="DeleteCategory" asp-controller="Admin" class="danger">Delete</button>
+                    <a asp-action="EditCategory" asp-controller="Admin" asp-route-name="@item.Name" class="btn-primary">Edit</a>
+                </div>
             </div>
-        </div>
-    }
+        }
+    </form>
 </div>
