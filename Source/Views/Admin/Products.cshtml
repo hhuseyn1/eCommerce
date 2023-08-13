@@ -5,3 +5,21 @@
     <a class="create-button" href="../Admin/AddProduct">Create Product</a>
 </div>
 <div class="colored-line"></div>
+<div class="main">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <img src="~/img/default.jpg" />
+                <h5 class="card-title">@item.Name</h5>
+                <p class="card-text">Id: @item.Id</p>
+                <p class="card-text">Category: @item.Category.Name</p>
+                <p class="card-text">Description: @item.Description</p>
+                <p class="card-text">Tags: Tags</p>
+                <p class="card-text">Created Date: @item.CreatedDate</p>
+                <button asp-action="DeleteProduct" asp-controller="Admin" class="danger">Delete</button>
+                <a asp-action="EditProduct" asp-controller="Admin" asp-route-name="Name" class="btn-primary">Edit</a>
+            </div>
+        </div>
+    }
+</div>

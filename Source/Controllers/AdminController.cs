@@ -38,10 +38,6 @@ public class AdminController : Controller
         return View("AddCategory");
     }
 
-    public IActionResult EditCategory()
-    {
-        return View("EditCategory");
-    }
 
     public IActionResult Tags()
     {

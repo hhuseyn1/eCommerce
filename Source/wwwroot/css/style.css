@@ -163,6 +163,8 @@ h3 {
 	border-radius: 10px;
 	transition: all 0.3s ease;
 	text-decoration: none;
+	border:none;
+	cursor: pointer;
 }
 
 .danger {
@@ -182,4 +184,38 @@ h3 {
 .danger:hover {
 	background-color: #c82333;
 	cursor: pointer;
+}
+
+
+.container {
+	max-width: 600px;
+	margin: auto;
+	padding: 30px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+label {
+	font-weight: bold;
+}
+
+input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+input[readonly]{
+	background-color: #cccccc;
+}
+
+.card-body h5{
+	margin-top: 10px;
+}
+
+.card-body img{
+	max-width: 33%;
+	border: 1px solid #f1f1f1;
 }

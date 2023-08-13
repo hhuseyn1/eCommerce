@@ -1,1 +1,23 @@
-﻿<h1>Edit Tag</h1>
+﻿@model Tag
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Tag</title>
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Tag</h1>
+        <form action="EditTag" method="post">
+            <label for="Id">Id:</label>
+            <input name="Id" value="@Model.Id" readonly>
+            <label for="Name">Name:</label>
+            <input type="text" name="Name" value="@Model.Name">
+            <label for="CreatedDate">Created Date:</label>
+            <input type="datetime" name="CreatedDate" value="@Model.CreatedDate" readonly>
+            <button asp-action="Tags" asp-controller="Admin" class="danger" type="submit">Cancel</button>
+            <button class="btn-primary" type="submit">Save</button>
+        </form>
+    </div>
+</body>
+</html>
