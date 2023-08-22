@@ -94,24 +94,16 @@ public class AdminController : Controller
     }
 
     [HttpGet]
-    public IActionResult EditProduct(string name)
+    public IActionResult EditProduct(Guid productId)
     {
-        var product = _context.Products.FirstOrDefault(p => p.Name == name);
-        if (product is not null)
-            return View(product);
-        return RedirectToAction("Products");
+        return View();
     }
 
     [HttpPost]
     public IActionResult EditProduct(AddProductViewModel updatedProduct)
     {
-        if (ModelState.IsValid)
-        {
-            var product = _context.Products.FirstOrDefault(p => p.Id == updatedProduct.Id);
-            if (product is not null)
-                product.Name = updatedProduct.Name;
-        }
-        return RedirectToAction("Products");
+       
+        return View();
     }
 
     [HttpGet]
@@ -124,13 +116,14 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult EditCategory(AddCategoryViewModel updatedCategory)
+    public async Task<IActionResult> EditCategory(AddCategoryViewModel updatedCategory)
     {
         if (ModelState.IsValid)
         {
             var category = _context.Categories.FirstOrDefault(p => p.Id == updatedCategory.Id);
             if (category is not null)
-                category.Name = updatedCategory.Name;
+               category.Name = updatedCategory.Name;
+            await _context.SaveChangesAsync();
         }
         return RedirectToAction("Categories");
     }
