@@ -25,6 +25,11 @@ public class AdminController : Controller
 
     public IActionResult AddProduct()
     {
+        List<Category>categories = _context.Categories.ToList();
+        List<Tag>tags = _context.Tags.ToList();
+        ViewData["Categories"] = categories;
+        ViewData["Tags"] = tags;
+
         return View("AddProduct");
     }
 
@@ -57,9 +62,47 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult AddProduct(AddProductViewModel addProduct)
+    public async Task<IActionResult> AddProduct(AddProductViewModel addProduct)
     {
-        return View();
+        if (ModelState.IsValid)
+        {
+            var newProduct = new Product
+            {
+                Name = addProduct.Name,
+                Description = addProduct.Description,
+                Price = addProduct.Price,
+                CategoryId = addProduct.CategoryId,
+            };
+
+            if (addProduct.TagIds != null && addProduct.TagIds.Length > 0)
+            {
+                foreach (var tagId in addProduct.TagIds)
+                {
+                    // Add logic to associate tags with the product
+                    // For example, if you have a ProductTag model, you could add records here.
+                }
+            }
+
+            if (addProduct.ImageUrl != null)
+            {
+                var imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(addProduct.ImageUrl.FileName);
+                var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", imageFileName);
+
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await addProduct.ImageUrl.CopyToAsync(stream);
+                }
+
+                newProduct.ImageUrl = imageFileName; 
+            }
+
+            _context.Products.Add(newProduct);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Products");
+        }
+
+        return View(addProduct);
     }
     [HttpPost]
     public async Task<IActionResult> AddTag(AddTagViewModel addTag)

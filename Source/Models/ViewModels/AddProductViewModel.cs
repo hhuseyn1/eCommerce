@@ -14,6 +14,6 @@ public class AddProductViewModel : BaseEntity
     [Range(0.01, double.MaxValue, ErrorMessage = "Enter a valid product price!")]
     public decimal Price { get; set; }
     [Required(ErrorMessage = "Please select a category!")]
-    public int CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
     public int[] TagIds { get; set; }
 }
