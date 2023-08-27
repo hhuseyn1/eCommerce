@@ -6,6 +6,7 @@
 </div>
 <div class="colored-line"></div>
 <div class="main">
+    <form action="DeleteProduct" method="post">
     @foreach (var item in Model)
     {
         <div class="card">
@@ -17,9 +18,10 @@
                 <p class="card-text">Description: @item.Description</p>
                 <p class="card-text">Tags: Tags</p>
                 <p class="card-text">Created Date: @item.CreatedDate</p>
-                <button asp-action="DeleteProduct" asp-controller="Admin" class="danger">Delete</button>
+                <button type="submit" name="id" value="@item.Id" class="danger">Delete</button>
                 <a asp-action="EditProduct" asp-controller="Admin" asp-route-name="@item.Name" class="btn-primary">Edit</a>
             </div>
         </div>
     }
+    </form>
 </div>

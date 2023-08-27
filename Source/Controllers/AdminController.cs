@@ -102,7 +102,7 @@ public class AdminController : Controller
     [HttpPost]
     public IActionResult EditProduct(AddProductViewModel updatedProduct)
     {
-       
+
         return View();
     }
 
@@ -122,7 +122,7 @@ public class AdminController : Controller
         {
             var category = _context.Categories.FirstOrDefault(p => p.Id == updatedCategory.Id);
             if (category is not null)
-               category.Name = updatedCategory.Name;
+                category.Name = updatedCategory.Name;
             await _context.SaveChangesAsync();
         }
         return RedirectToAction("Categories");
@@ -138,41 +138,54 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult EditTag(AddTagViewModel updatedTag)
+    public async Task<IActionResult> EditTag(AddTagViewModel updatedTag)
     {
         if (ModelState.IsValid)
         {
             var tag = _context.Tags.FirstOrDefault(p => p.Id == updatedTag.Id);
             if (tag is not null)
                 tag.Name = updatedTag.Name;
+            await _context.SaveChangesAsync();
         }
         return RedirectToAction("Tags");
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> DeleteProduct(Product deleteProduct)
+    public async Task<IActionResult> DeleteProduct(Guid id)
     {
-
+        var product = _context.Products.FirstOrDefault(p => p.Id == id);
+        if (product is not null)
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+        }
         return RedirectToAction("Products");
     }
 
     [HttpPost]
-    public async Task<IActionResult> DeleteTag(Tag deleteTag)
+    public async Task<IActionResult> DeleteTag(Guid id)
     {
-
+        var tag = _context.Tags.FirstOrDefault(p => p.Id == id);
+        if (tag is not null)
+        {
+            _context.Tags.Remove(tag);
+            await _context.SaveChangesAsync();
+        }
         return RedirectToAction("Tags");
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> DeleteCategory(Category deleteCategory)
+    public async Task<IActionResult> DeleteCategory(Guid id)
     {
-
+        var category = _context.Categories.FirstOrDefault(p => p.Id == id);
+        if (category is not null)
+        {
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+        }
         return RedirectToAction("Categories");
     }
-
-
-
 
 }
