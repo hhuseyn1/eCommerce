@@ -5,17 +5,20 @@ using Source.Data;
 using Source.Models;
 using Source.Models.ViewModels;
 
+
 namespace Source.Controllers;
 
 public class AdminController : Controller
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
-    public AdminController(AppDbContext context, IMapper mapper)
+    public AdminController(AppDbContext context, IMapper mapper, IWebHostEnvironment hostingEnvironment)
     {
         this._context = context;
         this._mapper = mapper;
+        this._hostingEnvironment = hostingEnvironment;
     }
 
     public IActionResult Index()
@@ -54,6 +57,8 @@ public class AdminController : Controller
     }
     public IActionResult Products()
     {
+        List<Tag> tags = _context.Tags.ToList();
+        ViewData["Tags"] = tags;
         return View(_context.Products.ToList());
     }
     public IActionResult About()
@@ -72,16 +77,8 @@ public class AdminController : Controller
                 Description = addProduct.Description,
                 Price = addProduct.Price,
                 CategoryId = addProduct.CategoryId,
+                ProductTags = addProduct.TagIds?.Select(tagId => new ProductTag { TagId = tagId }).ToList()
             };
-
-            if (addProduct.TagIds != null && addProduct.TagIds.Length > 0)
-            {
-                foreach (var tagId in addProduct.TagIds)
-                {
-                    // Add logic to associate tags with the product
-                    // For example, if you have a ProductTag model, you could add records here.
-                }
-            }
 
             if (addProduct.ImageUrl != null)
             {
@@ -93,7 +90,7 @@ public class AdminController : Controller
                     await addProduct.ImageUrl.CopyToAsync(stream);
                 }
 
-                newProduct.ImageUrl = imageFileName; 
+                newProduct.ImageUrl = imageFileName;
             }
 
             _context.Products.Add(newProduct);
@@ -104,6 +101,7 @@ public class AdminController : Controller
 
         return View(addProduct);
     }
+
     [HttpPost]
     public async Task<IActionResult> AddTag(AddTagViewModel addTag)
     {

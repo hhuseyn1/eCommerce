@@ -15,5 +15,5 @@ public class AddProductViewModel : BaseEntity
     public decimal Price { get; set; }
     [Required(ErrorMessage = "Please select a category!")]
     public Guid CategoryId { get; set; }
-    public int[] TagIds { get; set; }
+    public Guid[] TagIds { get; set; }
 }

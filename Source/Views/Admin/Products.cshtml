@@ -16,7 +16,15 @@
                 <p class="card-text">Id: @item.Id</p>
                 <p class="card-text">Category: @item.Category.Name</p>
                 <p class="card-text">Description: @item.Description</p>
-                <p class="card-text">Tags: Tags</p>
+                    <label for="input-field" class="disp-block">Tags:</label>
+                    <div class="tags">
+                        @foreach (var tag in (List<Tag>)ViewData["Tags"])
+                        {
+                            <div class="tag">
+                                <label class="tag-label">@tag.Name</label>
+                            </div>
+                        }
+                    </div>
                 <p class="card-text">Created Date: @item.CreatedDate</p>
                 <button type="submit" name="id" value="@item.Id" class="danger">Delete</button>
                 <a asp-action="EditProduct" asp-controller="Admin" asp-route-name="@item.Name" class="btn-primary">Edit</a>

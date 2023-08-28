@@ -22,14 +22,14 @@
             {
                 <div class="tag">
                     <label class="tag-label">@item.Name</label>
-                    <input type="checkbox">
+                    <input type="checkbox" name="TagIds" value="@item.Id">
                 </div>
             }
         </div>
 
         <label for="input-field" class="disp-block">Description:</label>
         <textarea class="description-textarea"></textarea>
-        <button type="submit" asp-action="Index" asp-controller="Admin" class="cancel-btn">Cancel</button>
+        <button type="submit" asp-action="Products" asp-controller="Admin" class="cancel-btn">Cancel</button>
         <button type="submit" class="submit-btn">Add</button>
     </form>
 </div>
