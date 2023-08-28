@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Source.Data;
 using Source.Models;
@@ -82,15 +81,26 @@ public class AdminController : Controller
 
             if (addProduct.ImageUrl != null)
             {
-                var imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(addProduct.ImageUrl.FileName);
-                var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", imageFileName);
+                var fileExtension = Path.GetExtension(addProduct.ImageUrl.FileName).ToLower();
+                var validFormats = new[] { ".png", ".jpg", ".jpeg" };
 
-                using (var stream = new FileStream(imagePath, FileMode.Create))
+                if (validFormats.Contains(fileExtension))
                 {
-                    await addProduct.ImageUrl.CopyToAsync(stream);
-                }
+                    var imageFileName = Guid.NewGuid().ToString() + fileExtension;
+                    var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", imageFileName);
 
-                newProduct.ImageUrl = imageFileName;
+                    using (var stream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        await addProduct.ImageUrl.CopyToAsync(stream);
+                    }
+
+                    newProduct.ImageUrl = imageFileName;
+                }
+                else
+                {
+                    ModelState.AddModelError("ImageUrl", "Invalid image format. Only PNG and JPEG formats are allowed.");
+                    return View(addProduct);
+                }
             }
 
             _context.Products.Add(newProduct);
@@ -101,6 +111,7 @@ public class AdminController : Controller
 
         return View(addProduct);
     }
+
 
     [HttpPost]
     public async Task<IActionResult> AddTag(AddTagViewModel addTag)
@@ -135,9 +146,17 @@ public class AdminController : Controller
     }
 
     [HttpGet]
-    public IActionResult EditProduct(Guid productId)
+    public IActionResult EditProduct(string name)
     {
-        return View();
+        List<Category> categories = _context.Categories.ToList();
+        List<Tag> tags = _context.Tags.ToList();
+        ViewData["Categories"] = categories;
+        ViewData["Tags"] = tags;
+
+        var product = _context.Products.Where(p => p.Name == name);
+        if (product is not null)
+            return View(product);
+        return RedirectToAction("Products");
     }
 
     [HttpPost]

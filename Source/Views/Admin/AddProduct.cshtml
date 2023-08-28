@@ -2,16 +2,26 @@
 @model AddProductViewModel
 
 <link rel="stylesheet" href="~/css/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <h2 class="create">Create Product</h2>
 <div class="form-container">
-    <form action="AddProduct" method="post">
-        <label for="input-field">Name:</label>
+    <form action="AddProduct" method="post" enctype="multipart/form-data">
+        <div class="square-image">
+            <img src="~/img/default.jpg" alt="Default Image">
+            <div class="upload-icon">
+                <i class="fas fa-upload"></i>
+                <input type="file" id="image-upload-input" name="ImageUrl" style="display: none;">
+            </div>
+        </div>
+
+        <label for="input-field" class="disp-block">Name:</label>
         <input type="text" id="input-field" class="input-field" name="Name" placeholder="Enter name here...">
         <label for="input-field">Category:</label>
         <select>
             @foreach (var item in (List<Category>)ViewData["Categories"])
             {
-                <option class="option-product">
+                <option value="@item.Id" class="option-product">
                     <h5 class="product-option">@item.Name</h5>
                 </option>
             }
@@ -27,9 +37,54 @@
             }
         </div>
 
+        <label for="input-field" class="disp-block">Price:</label>
+        <input type="text" id="numeric-input" name="NumericValue" class="input-field">
         <label for="input-field" class="disp-block">Description:</label>
         <textarea class="description-textarea"></textarea>
         <button type="submit" asp-action="Products" asp-controller="Admin" class="cancel-btn">Cancel</button>
         <button type="submit" class="submit-btn">Add</button>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var numericInput = document.getElementById("numeric-input");
+
+        numericInput.addEventListener("input", function (event) {
+            var inputValue = event.target.value;
+            var numericValue = inputValue.replace(/[^0-9]/g, ""); 
+            event.target.value = numericValue; 
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        var imageUpload = document.getElementById("image-upload");
+
+        imageUpload.addEventListener("change", function (event) {
+            var selectedFile = event.target.files[0];
+
+            if (!selectedFile || !selectedFile.type.startsWith("image/")) {
+                event.target.value = "";
+                alert("Please select a valid image file.");
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $(".upload-icon").click(function () {
+            $("#image-upload-input").click();
+        });
+
+        $("#image-upload-input").change(function () {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(".square-image img").attr("src", e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+
+</script>

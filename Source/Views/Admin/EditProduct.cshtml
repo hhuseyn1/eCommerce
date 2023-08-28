@@ -1,39 +1,37 @@
-﻿@* @model Product
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Product</title>
-    <link rel="stylesheet" href="~/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Edit Product</h1>
-        <form action="EditProduct" method="post">
-            <label for="Id">Id:</label>
-            <input name="Id" value="@Model.Id" readonly>
-            <label for="Name">Name:</label>
-            <input type="text" name="Name" value="@Model.Name">
-            <label for="Category">Category:</label>
-            <div class="form-floating">
-                <select class="form-select" id="Category" name="Category" aria-label="Select a category">
-                    <option selected disabled>Select a category</option>
-                    @foreach (var category in (List<Category>)ViewData["Categories"])
-                    {
-                        <option value="@category.Id" @(category.Id == Model.Category.Id ? "selected" : "")>@category.Name</option>
-                    }
-                </select>
-                <label for="Category">Category</label>
-            </div>
-            <label for="Description">Description:</label>
-            <div class="form-group special-textarea">
-                <textarea asp-for="Description" style="resize: none;" class="form-control special-textarea-input"></textarea>
-            </div>
-            <label for="CreatedDate">Created Date:</label>
-            <input type="datetime" name="CreatedDate" value="@Model.CreatedDate" readonly>
-            <button asp-action="Products" asp-controller="Admin" class="danger" type="submit">Cancel</button>
-            <button class="btn-primary" type="submit">Save</button>
-        </form>
-    </div>
-</body>
-</html>
- *@
+﻿ @using Source.Models.ViewModels;
+@model Product
+@*
+
+<link rel="stylesheet" href="~/css/style.css" />
+<h2 class="create">Edit Product</h2>
+<div class="form-container">
+    <form action="EditProduct" method="post">
+        <label for="input-field">Name:</label>
+        <input type="text" id="input-field" class="input-field" name="Name" placeholder="Enter name here...">
+        <label for="input-field">Category:</label>
+        <select>
+            @foreach (var item in (List<Category>)ViewData["Categories"])
+            {
+                <option class="option-product">
+                    <h5 class="product-option">@item.Name</h5>
+                </option>
+            }
+        </select>
+        <label for="input-field" class="disp-block">Tags:</label>
+        <div class="tags">
+            @foreach (var item in (List<Tag>)ViewData["Tags"])
+            {
+                <div class="tag">
+                    <label class="tag-label">@item.Name</label>
+                    <input type="checkbox" name="TagIds" value="@item.Id">
+                </div>
+            }
+        </div>
+
+        <label for="input-field" class="disp-block">Description:</label>
+        <textarea class="description-textarea">@Model.Description</textarea>
+        <button type="submit" asp-action="Products" asp-controller="Admin" class="cancel-btn">Cancel</button>
+        <button type="submit" class="submit-btn">Edit</button>
+    </form>
+</div> 
+*@
