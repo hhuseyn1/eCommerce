@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Source.Data;
 using Source.Models;
 using Source.Models.ViewModels;
@@ -25,10 +26,10 @@ public class AdminController : Controller
         return View();
     }
 
-    public IActionResult AddProduct()
+    public async Task<IActionResult> AddProduct()
     {
         List<Category>categories = _context.Categories.ToList();
-        List<Tag>tags = _context.Tags.ToList();
+        List<Tag>tags = await _context.Tags.ToListAsync();
         ViewData["Categories"] = categories;
         ViewData["Tags"] = tags;
 
@@ -54,9 +55,9 @@ public class AdminController : Controller
     {
         return View(_context.Categories.ToList());
     }
-    public IActionResult Products()
+    public async Task<IActionResult> Products()
     {
-        List<Tag> tags = _context.Tags.ToList();
+        List<Tag> tags = await _context.Tags.ToListAsync();
         ViewData["Tags"] = tags;
         return View(_context.Products.ToList());
     }
@@ -70,6 +71,15 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
+
+            if (addProduct.TagIds == null || addProduct.TagIds.Length == 0)
+            {
+                ModelState.AddModelError("TagIds", "Please select at least one tag.");
+                ViewData["Categories"] = await _context.Categories.ToListAsync();
+                ViewData["Tags"] = await _context.Tags.ToListAsync();
+                return View(addProduct);
+            }
+
             var newProduct = new Product
             {
                 Name = addProduct.Name,
@@ -99,6 +109,8 @@ public class AdminController : Controller
                 else
                 {
                     ModelState.AddModelError("ImageUrl", "Invalid image format. Only PNG and JPEG formats are allowed.");
+                    ViewData["Categories"] = await _context.Categories.ToListAsync();
+                    ViewData["Tags"] = await _context.Tags.ToListAsync();
                     return View(addProduct);
                 }
             }
@@ -106,10 +118,9 @@ public class AdminController : Controller
             _context.Products.Add(newProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Products");
         }
+            return RedirectToAction("Products");
 
-        return View(addProduct);
     }
 
 

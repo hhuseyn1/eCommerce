@@ -3,7 +3,6 @@
 
 <link rel="stylesheet" href="~/css/style.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <h2 class="create">Create Product</h2>
 <div class="form-container">
     <form action="AddProduct" method="post" enctype="multipart/form-data">
@@ -32,15 +31,18 @@
             {
                 <div class="tag">
                     <label class="tag-label">@item.Name</label>
-                    <input type="checkbox" name="TagIds" value="@item.Id">
+                    <input type="checkbox" name="TagIds[@item.Id]" value="@item.Id">
                 </div>
             }
+
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.TagIds)</span>
+
         </div>
 
         <label for="input-field" class="disp-block">Price:</label>
-        <input type="text" id="numeric-input" name="NumericValue" class="input-field">
+        <input type="text" id="numeric-input" name="NumericValue" class="input-field" placeholder="Enter price here...">
         <label for="input-field" class="disp-block">Description:</label>
-        <textarea class="description-textarea"></textarea>
+        <textarea class="description-textarea" placeholder="Enter description here..."></textarea>
         <button type="submit" asp-action="Products" asp-controller="Admin" class="cancel-btn">Cancel</button>
         <button type="submit" class="submit-btn">Add</button>
     </form>
@@ -65,23 +67,6 @@
             if (!selectedFile || !selectedFile.type.startsWith("image/")) {
                 event.target.value = "";
                 alert("Please select a valid image file.");
-            }
-        });
-    });
-
-    $(document).ready(function () {
-        $(".upload-icon").click(function () {
-            $("#image-upload-input").click();
-        });
-
-        $("#image-upload-input").change(function () {
-            var file = this.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $(".square-image img").attr("src", e.target.result);
-                };
-                reader.readAsDataURL(file);
             }
         });
     });
