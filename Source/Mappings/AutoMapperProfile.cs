@@ -9,7 +9,6 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<AddProductViewModel, Product>();
-        CreateMap<AddTagViewModel, Tag>();
         CreateMap<AddCategoryViewModel, Category>();
     }
 }

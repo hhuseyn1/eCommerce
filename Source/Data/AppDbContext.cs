@@ -14,8 +14,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ProductTag>()
-            .HasKey(pt => new { pt.ProductId, pt.TagId });
 
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Category)
@@ -23,15 +21,6 @@ public class AppDbContext : DbContext
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<ProductTag>()
-            .HasOne(pt => pt.Tag)
-            .WithMany(t => t.ProductTags)
-            .HasForeignKey(pt => pt.TagId);
-
-        modelBuilder.Entity<ProductTag>()
-          .HasOne(pt => pt.Product)
-          .WithMany(p => p.ProductTags)
-          .HasForeignKey(pt => pt.ProductId);
 
         modelBuilder.Entity<Product>()
             .Property(p => p.Price)
@@ -40,6 +29,4 @@ public class AppDbContext : DbContext
     }
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<Tag> Tags { get; set; }
-
 }

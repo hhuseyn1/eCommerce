@@ -29,16 +29,9 @@ public class AdminController : Controller
     public async Task<IActionResult> AddProduct()
     {
         List<Category>categories = _context.Categories.ToList();
-        List<Tag>tags = await _context.Tags.ToListAsync();
         ViewData["Categories"] = categories;
-        ViewData["Tags"] = tags;
 
         return View("AddProduct");
-    }
-
-    public IActionResult AddTag()
-    {
-        return View("AddTag");
     }
 
     public IActionResult AddCategory()
@@ -46,19 +39,12 @@ public class AdminController : Controller
         return View("AddCategory");
     }
 
-
-    public IActionResult Tags()
-    {
-        return View(_context.Tags.ToList());
-    }
     public IActionResult Categories()
     {
         return View(_context.Categories.ToList());
     }
     public async Task<IActionResult> Products()
     {
-        List<Tag> tags = await _context.Tags.ToListAsync();
-        ViewData["Tags"] = tags;
         return View(_context.Products.ToList());
     }
     public IActionResult About()
@@ -72,21 +58,12 @@ public class AdminController : Controller
         if (ModelState.IsValid)
         {
 
-            if (addProduct.TagIds == null || addProduct.TagIds.Length == 0)
-            {
-                ModelState.AddModelError("TagIds", "Please select at least one tag.");
-                ViewData["Categories"] = await _context.Categories.ToListAsync();
-                ViewData["Tags"] = await _context.Tags.ToListAsync();
-                return View(addProduct);
-            }
-
             var newProduct = new Product
             {
                 Name = addProduct.Name,
                 Description = addProduct.Description,
                 Price = addProduct.Price,
-                CategoryId = addProduct.CategoryId,
-                ProductTags = addProduct.TagIds?.Select(tagId => new ProductTag { TagId = tagId }).ToList()
+                CategoryId = addProduct.CategoryId
             };
 
             if (addProduct.ImageUrl != null)
@@ -110,7 +87,6 @@ public class AdminController : Controller
                 {
                     ModelState.AddModelError("ImageUrl", "Invalid image format. Only PNG and JPEG formats are allowed.");
                     ViewData["Categories"] = await _context.Categories.ToListAsync();
-                    ViewData["Tags"] = await _context.Tags.ToListAsync();
                     return View(addProduct);
                 }
             }
@@ -121,23 +97,6 @@ public class AdminController : Controller
         }
             return RedirectToAction("Products");
 
-    }
-
-
-    [HttpPost]
-    public async Task<IActionResult> AddTag(AddTagViewModel addTag)
-    {
-
-        if (ModelState.IsValid)
-        {
-            Tag tag = _mapper.Map<Tag>(addTag);
-            tag.Id = Guid.NewGuid();
-            tag.Name = addTag.Name;
-            tag.CreatedDate = DateTime.Now;
-            _context.Tags.Add(tag);
-            await _context.SaveChangesAsync();
-        }
-        return RedirectToAction("Tags");
     }
 
 
@@ -160,9 +119,7 @@ public class AdminController : Controller
     public IActionResult EditProduct(string name)
     {
         List<Category> categories = _context.Categories.ToList();
-        List<Tag> tags = _context.Tags.ToList();
         ViewData["Categories"] = categories;
-        ViewData["Tags"] = tags;
 
         var product = _context.Products.Where(p => p.Name == name);
         if (product is not null)
@@ -199,27 +156,6 @@ public class AdminController : Controller
         return RedirectToAction("Categories");
     }
 
-    [HttpGet]
-    public IActionResult EditTag(string name)
-    {
-        var tag = _context.Tags.FirstOrDefault(p => p.Name == name);
-        if (tag is not null)
-            return View(tag);
-        return RedirectToAction("Tags");
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> EditTag(AddTagViewModel updatedTag)
-    {
-        if (ModelState.IsValid)
-        {
-            var tag = _context.Tags.FirstOrDefault(p => p.Id == updatedTag.Id);
-            if (tag is not null)
-                tag.Name = updatedTag.Name;
-            await _context.SaveChangesAsync();
-        }
-        return RedirectToAction("Tags");
-    }
 
 
     [HttpPost]
@@ -233,19 +169,6 @@ public class AdminController : Controller
         }
         return RedirectToAction("Products");
     }
-
-    [HttpPost]
-    public async Task<IActionResult> DeleteTag(Guid id)
-    {
-        var tag = _context.Tags.FirstOrDefault(p => p.Id == id);
-        if (tag is not null)
-        {
-            _context.Tags.Remove(tag);
-            await _context.SaveChangesAsync();
-        }
-        return RedirectToAction("Tags");
-    }
-
 
     [HttpPost]
     public async Task<IActionResult> DeleteCategory(Guid id)

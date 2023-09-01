@@ -77,39 +77,9 @@ namespace Source.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Source.Models.ProductTag", b =>
-                {
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+            
 
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ProductId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ProductTag");
-                });
-
-            modelBuilder.Entity("Source.Models.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
-                });
-
+            
             modelBuilder.Entity("Source.Models.Product", b =>
                 {
                     b.HasOne("Source.Models.Category", "Category")
@@ -121,39 +91,13 @@ namespace Source.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Source.Models.ProductTag", b =>
-                {
-                    b.HasOne("Source.Models.Product", "Product")
-                        .WithMany("ProductTags")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Source.Models.Tag", "Tag")
-                        .WithMany("ProductTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Tag");
-                });
 
             modelBuilder.Entity("Source.Models.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("Source.Models.Product", b =>
-                {
-                    b.Navigation("ProductTags");
-                });
-
-            modelBuilder.Entity("Source.Models.Tag", b =>
-                {
-                    b.Navigation("ProductTags");
-                });
+           
 #pragma warning restore 612, 618
         }
     }

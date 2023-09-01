@@ -9,9 +9,10 @@
         <div class="square-image">
             <img src="~/img/default.jpg" alt="Default Image">
             <div class="upload-icon">
-                <i class="fas fa-upload"></i>
+                <i class="fas fa-upload" id="upload-icon"></i>
                 <input type="file" id="image-upload-input" name="ImageUrl" style="display: none;">
             </div>
+
         </div>
 
         <label for="input-field" class="disp-block">Name:</label>
@@ -25,20 +26,6 @@
                 </option>
             }
         </select>
-        <label for="input-field" class="disp-block">Tags:</label>
-        <div class="tags">
-            @foreach (var item in (List<Tag>)ViewData["Tags"])
-            {
-                <div class="tag">
-                    <label class="tag-label">@item.Name</label>
-                    <input type="checkbox" name="TagIds[@item.Id]" value="@item.Id">
-                </div>
-            }
-
-            <span class="text-danger">@Html.ValidationMessageFor(model => model.TagIds)</span>
-
-        </div>
-
         <label for="input-field" class="disp-block">Price:</label>
         <input type="text" id="numeric-input" name="NumericValue" class="input-field" placeholder="Enter price here...">
         <label for="input-field" class="disp-block">Description:</label>
@@ -58,18 +45,5 @@
             event.target.value = numericValue; 
         });
     });
-    document.addEventListener("DOMContentLoaded", function () {
-        var imageUpload = document.getElementById("image-upload");
-
-        imageUpload.addEventListener("change", function (event) {
-            var selectedFile = event.target.files[0];
-
-            if (!selectedFile || !selectedFile.type.startsWith("image/")) {
-                event.target.value = "";
-                alert("Please select a valid image file.");
-            }
-        });
-    });
-
 
 </script>
