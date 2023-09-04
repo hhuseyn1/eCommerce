@@ -1,37 +1,50 @@
-﻿ @using Source.Models.ViewModels;
+﻿@using Source.Models.ViewModels;
 @model Product
-@*
 
 <link rel="stylesheet" href="~/css/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <h2 class="create">Edit Product</h2>
 <div class="form-container">
     <form action="EditProduct" method="post">
-        <label for="input-field">Name:</label>
-        <input type="text" id="input-field" class="input-field" name="Name" placeholder="Enter name here...">
+
+        <div class="square-image">
+            <img src="~/img/default.jpg" alt="Default Image">
+            <div class="upload-icon">
+                <label for="image-upload-input" id="upload-label">
+                    <i class="fas fa-upload" id="upload-icon"></i>
+                </label>
+            </div>
+        </div>
+
+        <label for="input-field" class="disp-block">Name:</label>
+        <input type="text" id="input-field" class="input-field" name="Name" placeholder="Enter name here..." value="@Model.Name">
         <label for="input-field">Category:</label>
-        <select>
+        <select name="CategoryId">
             @foreach (var item in (List<Category>)ViewData["Categories"])
             {
-                <option class="option-product">
+                <option value="@item.Id" class="option-product">
                     <h5 class="product-option">@item.Name</h5>
                 </option>
             }
         </select>
-        <label for="input-field" class="disp-block">Tags:</label>
-        <div class="tags">
-            @foreach (var item in (List<Tag>)ViewData["Tags"])
-            {
-                <div class="tag">
-                    <label class="tag-label">@item.Name</label>
-                    <input type="checkbox" name="TagIds" value="@item.Id">
-                </div>
-            }
-        </div>
-
+        <label for="input-field" class="disp-block">Price:</label>
+        <input type="text" id="numeric-input" name="Price" class="input-field" placeholder="Enter price here..." value="@Model.Price">
         <label for="input-field" class="disp-block">Description:</label>
-        <textarea class="description-textarea">@Model.Description</textarea>
+        <textarea name="Description" class="description-textarea" placeholder="Enter description here..." value="@Model.Description"></textarea>
         <button type="submit" asp-action="Products" asp-controller="Admin" class="cancel-btn">Cancel</button>
         <button type="submit" class="submit-btn">Edit</button>
     </form>
-</div> 
-*@
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var numericInput = document.getElementById("numeric-input");
+
+        numericInput.addEventListener("input", function (event) {
+            var inputValue = event.target.value;
+            var numericValue = inputValue.replace(/[^0-9]/g, "");
+            event.target.value = numericValue;
+        });
+    });
+
+</script>

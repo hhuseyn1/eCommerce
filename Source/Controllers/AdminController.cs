@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Source.Data;
 using Source.Models;
 using Source.Models.ViewModels;
-
-
 namespace Source.Controllers;
 
 public class AdminController : Controller
@@ -28,7 +27,7 @@ public class AdminController : Controller
 
     public async Task<IActionResult> AddProduct()
     {
-        List<Category>categories = _context.Categories.ToList();
+        List<Category> categories = _context.Categories.ToList();
         ViewData["Categories"] = categories;
 
         return View("AddProduct");
@@ -43,7 +42,7 @@ public class AdminController : Controller
     {
         return View(_context.Categories.ToList());
     }
-    public async Task<IActionResult> Products()
+    public IActionResult Products()
     {
         return View(_context.Products.ToList());
     }
@@ -52,53 +51,28 @@ public class AdminController : Controller
         return View();
     }
 
+
     [HttpPost]
     public async Task<IActionResult> AddProduct(AddProductViewModel addProduct)
     {
         if (ModelState.IsValid)
         {
-
-            var newProduct = new Product
+            var newProduct = _mapper.Map<Product>(addProduct);
+            newProduct = new Product
             {
                 Name = addProduct.Name,
                 Description = addProduct.Description,
                 Price = addProduct.Price,
-                CategoryId = addProduct.CategoryId
+                CategoryId = addProduct.CategoryId,
+                ImageUrl = "default"
             };
-
-            if (addProduct.ImageUrl != null)
-            {
-                var fileExtension = Path.GetExtension(addProduct.ImageUrl.FileName).ToLower();
-                var validFormats = new[] { ".png", ".jpg", ".jpeg" };
-
-                if (validFormats.Contains(fileExtension))
-                {
-                    var imageFileName = Guid.NewGuid().ToString() + fileExtension;
-                    var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", imageFileName);
-
-                    using (var stream = new FileStream(imagePath, FileMode.Create))
-                    {
-                        await addProduct.ImageUrl.CopyToAsync(stream);
-                    }
-
-                    newProduct.ImageUrl = imageFileName;
-                }
-                else
-                {
-                    ModelState.AddModelError("ImageUrl", "Invalid image format. Only PNG and JPEG formats are allowed.");
-                    ViewData["Categories"] = await _context.Categories.ToListAsync();
-                    return View(addProduct);
-                }
-            }
 
             _context.Products.Add(newProduct);
             await _context.SaveChangesAsync();
-
         }
-            return RedirectToAction("Products");
 
+        return RedirectToAction("Products");
     }
-
 
     [HttpPost]
     public async Task<IActionResult> AddCategory(AddCategoryViewModel addCategory)
@@ -116,28 +90,41 @@ public class AdminController : Controller
     }
 
     [HttpGet]
-    public IActionResult EditProduct(string name)
+    public async Task<IActionResult> EditProduct(string name)
     {
         List<Category> categories = _context.Categories.ToList();
         ViewData["Categories"] = categories;
-
-        var product = _context.Products.Where(p => p.Name == name);
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.Name == name);
         if (product is not null)
             return View(product);
         return RedirectToAction("Products");
     }
 
     [HttpPost]
-    public IActionResult EditProduct(AddProductViewModel updatedProduct)
+    public async Task<IActionResult> EditProduct(AddProductViewModel updatedProduct)
     {
+        List<Category> categories = _context.Categories.ToList();
+        ViewData["Categories"] = categories;
 
-        return View();
+        if (ModelState.IsValid)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == updatedProduct.Id);
+            if (product is null) return RedirectToAction("Products");
+            product.Name = updatedProduct.Name;
+            product.Price = updatedProduct.Price;
+            product.CategoryId = updatedProduct.CategoryId;
+            product.Description = updatedProduct.Description;
+            product.ImageUrl = updatedProduct.ImageUrl?.ToString();
+
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction("Products");
     }
 
     [HttpGet]
-    public IActionResult EditCategory(string name)
+    public async Task<IActionResult> EditCategory(string name)
     {
-        var category = _context.Categories.FirstOrDefault(p => p.Name == name);
+        var category = await _context.Categories.FirstOrDefaultAsync(p => p.Name == name);
         if (category is not null)
             return View(category);
         return RedirectToAction("Categories");
