@@ -1,7 +1,7 @@
 ﻿@model List<Category>
 <div class="header">
     <h1>Categories</h1>
-    <a class="create-button" asp-action="AddCategory" asp-controller="Admin">Create Category</a>
+    <a class="create-button" asp-action="AddCategory" asp-controller="Home">Create Category</a>
 </div>
 <div class="colored-line"></div>
 <div class="main">
@@ -14,7 +14,7 @@
                     <p class="card-text">Id: @item.Id</p>
                     <p class="card-text">Created Date: @item.CreatedDate</p>
                     <button type="submit" name="id" value="@item.Id" class="danger">Delete</button>
-                    <a asp-action="EditCategory" asp-controller="Admin" asp-route-name="@item.Name" class="btn-primary">Edit</a>
+                    <a asp-action="EditCategory" asp-controller="Home" asp-route-name="@item.Name" class="btn-primary">Edit</a>
                 </div>
             </div>
         }

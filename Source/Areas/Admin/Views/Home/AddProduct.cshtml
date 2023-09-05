@@ -1,23 +1,23 @@
 ﻿@using Source.Models.ViewModels;
-@model Product
+@model AddProductViewModel
 
 <link rel="stylesheet" href="~/css/style.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<h2 class="create">Edit Product</h2>
+<h2 class="create">Create Product</h2>
 <div class="form-container">
-    <form action="EditProduct" method="post">
+    <form action="AddProduct" method="post" enctype="multipart/form-data">
 
         <div class="square-image">
             <img src="~/img/default.jpg" alt="Default Image">
             <div class="upload-icon">
                 <label for="image-upload-input" id="upload-label">
                     <i class="fas fa-upload" id="upload-icon"></i>
-                </label>
+                </label>    
             </div>
         </div>
 
         <label for="input-field" class="disp-block">Name:</label>
-        <input type="text" id="input-field" class="input-field" name="Name" placeholder="Enter name here..." value="@Model.Name">
+        <input type="text" id="input-field" class="input-field" name="Name" placeholder="Enter name here...">
         <label for="input-field">Category:</label>
         <select name="CategoryId">
             @foreach (var item in (List<Category>)ViewData["Categories"])
@@ -28,11 +28,11 @@
             }
         </select>
         <label for="input-field" class="disp-block">Price:</label>
-        <input type="text" id="numeric-input" name="Price" class="input-field" placeholder="Enter price here..." value="@Model.Price">
+        <input type="text" id="numeric-input" name="Price" class="input-field" placeholder="Enter price here...">
         <label for="input-field" class="disp-block">Description:</label>
-        <textarea name="Description" class="description-textarea" placeholder="Enter description here..." value="@Model.Description"></textarea>
-        <button type="submit" asp-action="Products" asp-controller="Admin" class="cancel-btn">Cancel</button>
-        <button type="submit" class="submit-btn">Edit</button>
+        <textarea name="Description" class="description-textarea" placeholder="Enter description here..."></textarea>
+        <button type="submit" asp-action="Products" asp-controller="Home" class="cancel-btn">Cancel</button>
+        <button type="submit" class="submit-btn">Add</button>
     </form>
 </div>
 
@@ -42,8 +42,8 @@
 
         numericInput.addEventListener("input", function (event) {
             var inputValue = event.target.value;
-            var numericValue = inputValue.replace(/[^0-9]/g, "");
-            event.target.value = numericValue;
+            var numericValue = inputValue.replace(/[^0-9]/g, ""); 
+            event.target.value = numericValue; 
         });
     });
 

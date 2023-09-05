@@ -1,23 +1,20 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using Source.Data;
 using Source.Models;
 using Source.Models.ViewModels;
-namespace Source.Controllers;
-
-public class AdminController : Controller
+namespace Source.Areas.Admin.Controllers;
+[Area("Admin")]
+public class HomeController : Controller
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IWebHostEnvironment _hostingEnvironment;
 
-    public AdminController(AppDbContext context, IMapper mapper, IWebHostEnvironment hostingEnvironment)
+    public HomeController(AppDbContext context, IMapper mapper)
     {
-        this._context = context;
-        this._mapper = mapper;
-        this._hostingEnvironment = hostingEnvironment;
+        _context = context;
+        _mapper = mapper;
     }
 
     public IActionResult Index()
@@ -25,7 +22,7 @@ public class AdminController : Controller
         return View();
     }
 
-    public async Task<IActionResult> AddProduct()
+    public IActionResult AddProduct()
     {
         List<Category> categories = _context.Categories.ToList();
         ViewData["Categories"] = categories;
