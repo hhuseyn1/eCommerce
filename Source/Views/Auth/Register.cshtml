@@ -1,0 +1,29 @@
+﻿@using Source.Models.ViewModels;
+@model RegisterViewModel
+
+<div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+<form asp-controller="Auth" action="Register" method="post">
+    <h3>Register Here</h3>
+
+    <label for="username">Username</label>
+    <input type="text" asp-for="Login" placeholder="Email or Phone" id="username">
+    <span asp-validation-for="Login" class="text-danger"></span>
+
+    <label for="password">Password</label>
+    <input type="password" asp-for="Password" placeholder="Password" id="password">
+    <span asp-validation-for="Password" class="text-danger"></span>
+
+    <label for="password">Confirm Password</label>
+    <input type="password" asp-for="ConfirmPassword" placeholder="Confirm Password" id="confirm">
+    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <button type="submit">Register</button>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}

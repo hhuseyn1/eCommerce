@@ -56,19 +56,16 @@ namespace Source.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
 
@@ -77,9 +74,26 @@ namespace Source.Migrations
                     b.ToTable("Products");
                 });
 
-            
+            modelBuilder.Entity("Source.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-            
+                    b.Property<string>("Login")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isAdmin")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Source.Models.Product", b =>
                 {
                     b.HasOne("Source.Models.Category", "Category")
@@ -91,13 +105,10 @@ namespace Source.Migrations
                     b.Navigation("Category");
                 });
 
-
             modelBuilder.Entity("Source.Models.Category", b =>
                 {
                     b.Navigation("Products");
                 });
-
-           
 #pragma warning restore 612, 618
         }
     }

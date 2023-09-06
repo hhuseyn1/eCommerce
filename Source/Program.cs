@@ -1,7 +1,10 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Abstractions;
 using Source.Data;
 using Source.Mappings;
+using Source.Middlewares;
+using Source.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,9 @@ var mapper = mapConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserManager,UserManager>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +41,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<AuthMiddleware>();
+
+
 app.UseEndpoints(endpoint =>
 {
     endpoint.MapAreaControllerRoute(
