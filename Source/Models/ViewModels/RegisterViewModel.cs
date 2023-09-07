@@ -4,6 +4,13 @@ namespace Source.Models.ViewModels;
 
 public class RegisterViewModel
 {
+
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [MinLength(5)]
+    public string FullName { get; set; }
+    
     [Required]
     [MinLength(5)]
     public string Login {  get; set; }

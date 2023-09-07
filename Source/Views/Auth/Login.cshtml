@@ -16,6 +16,12 @@
     <input asp-for="Password" type="password" placeholder="Password" id="password">
     <span asp-validation-for="Password" class="text-danger"></span>
     <div asp-validation-summary="All" class="text-danger"></div>
+    <div>
+        <input type="checkbox" asp-for="RememberMe" />
+        <label for="">
+            RememberMe
+        </label>
+    </div>
     <button>Log In</button>
     <div class="social">
         <div class="go"><i class="fab fa-google"></i>  Google</div>
