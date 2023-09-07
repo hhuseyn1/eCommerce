@@ -60,7 +60,7 @@ public class HomeController : Controller
                 Name = addProduct.Name,
                 Description = addProduct.Description,
                 Price = addProduct.Price,
-                CategoryId = addProduct.CategoryId,
+                CategoryId = addProduct.CategoryId.ToString(),
                 ImageUrl = "default"
             };
 
@@ -77,7 +77,7 @@ public class HomeController : Controller
         if (ModelState.IsValid)
         {
             Category category = _mapper.Map<Category>(addCategory);
-            category.Id = Guid.NewGuid();
+            category.Id = Guid.NewGuid().ToString();
             category.Name = addCategory.Name;
             category.CreatedDate = DateTime.Now;
             _context.Categories.Add(category);
@@ -109,7 +109,7 @@ public class HomeController : Controller
             if (product is null) return RedirectToAction("Products");
             product.Name = updatedProduct.Name;
             product.Price = updatedProduct.Price;
-            product.CategoryId = updatedProduct.CategoryId;
+            product.CategoryId = updatedProduct.CategoryId.ToString();
             product.Description = updatedProduct.Description;
             product.ImageUrl = updatedProduct.ImageUrl?.ToString();
 
@@ -143,7 +143,7 @@ public class HomeController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> DeleteProduct(Guid id)
+    public async Task<IActionResult> DeleteProduct(string id)
     {
         var product = _context.Products.FirstOrDefault(p => p.Id == id);
         if (product is not null)
@@ -155,7 +155,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> DeleteCategory(Guid id)
+    public async Task<IActionResult> DeleteCategory(string id)
     {
         var category = _context.Categories.FirstOrDefault(p => p.Id == id);
         if (category is not null)

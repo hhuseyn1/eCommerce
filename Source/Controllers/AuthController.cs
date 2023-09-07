@@ -26,7 +26,7 @@ public class AuthController : Controller
     public IActionResult Login() => View();
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel viewModel)
+    public IActionResult Register(RegisterViewModel viewModel)
     {
         try
         {
@@ -45,7 +45,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel viewModel)
+    public IActionResult Login(LoginViewModel viewModel)
     {
         try
         {

@@ -1,9 +1,11 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
 using Source.Data;
 using Source.Mappings;
 using Source.Middlewares;
+using Source.Models;
 using Source.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(
        op => op.UseSqlServer(builder.Configuration.GetConnectionString("default")));
+
+builder.Services.AddIdentity<AppUser,IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 var mapConfig = new MapperConfiguration(c =>
 {
