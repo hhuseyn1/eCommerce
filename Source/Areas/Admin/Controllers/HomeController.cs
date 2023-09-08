@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Source.Data;
@@ -6,6 +7,7 @@ using Source.Models;
 using Source.Models.ViewModels;
 namespace Source.Areas.Admin.Controllers;
 [Area("Admin")]
+[Authorize(Roles = "Admin")]
 public class HomeController : Controller
 {
     private readonly AppDbContext _context;

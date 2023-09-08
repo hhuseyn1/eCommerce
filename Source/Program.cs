@@ -1,3 +1,4 @@
+using AspNetCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(
        op => op.UseSqlServer(builder.Configuration.GetConnectionString("default")));
 
-builder.Services.AddIdentity<AppUser,IdentityRole>()
+builder.Services.AddIdentity<AppUser,IdentityRole>(options => {
+    options.Password.RequiredUniqueChars = 5;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.SignIn.RequireConfirmedEmail = true;
+})
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -64,5 +72,32 @@ app.UseEndpoints(endpoint =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
+
+
+var container = app.Services.CreateScope();
+var userManager = container.ServiceProvider.GetRequiredService<UserManager<AppUser>>(); 
+var roleManager = container.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>(); 
+
+if(!await roleManager.RoleExistsAsync("Admin"))
+{
+    var result = await roleManager.CreateAsync(new IdentityRole("Admin"));
+    if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
+}
+
+var user = await userManager.FindByEmailAsync("admin@admin.com");
+if(user is null)
+{
+    user = new AppUser()
+    {
+        UserName = "admin",
+        Email = "admin@admin.com",
+        FullName = "Admin",
+        EmailConfirmed = true
+    };
+    var result = await userManager.CreateAsync(user, "Admin123");
+    if(!result.Succeeded) throw new Exception(result.Errors.First().Description);
+    result = await userManager.AddToRoleAsync(user, "Admin");
+}
+
 
 app.Run();
